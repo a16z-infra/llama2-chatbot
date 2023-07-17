@@ -7,7 +7,7 @@ API enpoints on Replicate. Each model (7B & 13B) runs on Replicate on one A100 (
 
 Author: Marco Mascorro (@mascobot.com)
 Created: July 2023
-Version: 0.9.0
+Version: 0.9.0 (Experimental)
 Status: Development
 Python version: 3.9.15
 a16z-infra
@@ -34,7 +34,7 @@ REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
 #Your your (Replicate) models' endpoints:
 REPLICATE_MODEL_ENDPOINT7B = os.environ.get('REPLICATE_MODEL_ENDPOINT7B', default='')
 REPLICATE_MODEL_ENDPOINT13B = os.environ.get('REPLICATE_MODEL_ENDPOINT13B', default='')
-PRE_PROMPT = "A dialog, where user interacts with an assistant. Assistant is helpful, kind, obedient, honest, and knows its own limits.\n\n"
+PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant.\n\n"
 #container for the chat history
 response_container = st.container()
 #container for the user's text input
@@ -97,11 +97,11 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
         print (string_dialogue)
         output = replicate.run(st.session_state['llm'], input={"prompt": string_dialogue + "Assistant: ", "max_length": st.session_state['max_seq_len'], "temperature": st.session_state['temperature'], "top_p": st.session_state['top_p'], "repetition_penalty": 1}, api_token=REPLICATE_API_TOKEN)
         for item in output:
-            if "user:" in item.lower():
-                break
+            if "User:" in item:
+               break
             else:
                 full_response += item
-                message_placeholder.markdown(full_response + "▌")
+            message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     # Add assistant response to chat history
     st.session_state.chat_dialogue.append({"role": "assistant", "content": full_response})
