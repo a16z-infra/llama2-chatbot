@@ -18,6 +18,20 @@ import os
 import replicate
 ###Initial UI configuration:###
 st.set_page_config(page_title="LLaMA2 Chatbot by a16z-infra", page_icon="🧊", layout="wide")
+
+###TEMP PAGE PASSWORD PROTECTION:###REMOVE THIS BLOCK LATER:
+# PAGE_PASSWORD = os.environ.get('PAGE_PASSWORD', default='lol')
+# if 'password_page' not in st.session_state:
+#     st.session_state['password_page'] = ''
+# password = st.empty()
+# password_input = password.text_input('Enter Password', type="password")
+# if password_input == PAGE_PASSWORD:
+#     st.session_state['password_page'] = password_input
+# else:
+#     st.stop()
+# password.empty()
+###END OF TEMP PAGE PASSWORD PROTECTION###
+
 st.sidebar.header("LLaMA2 Chatbot")#Left sidebar menu
 st.sidebar.markdown('**by a16z Infra**')
 #Set config for a cleaner menu, footer & background:
@@ -106,8 +120,11 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
     # Add assistant response to chat history
     st.session_state.chat_dialogue.append({"role": "assistant", "content": full_response})
 
-
-
+##Add a sidebar with Resources:
+st.sidebar.header('**Resources:**')
+st.sidebar.markdown("<a style='text-decoration:none;' href='https://github.com/a16z-infra/llama2-chatbot'><font size=4>GitHub to clone this chat web app</font></a>", unsafe_allow_html=True)
+st.sidebar.markdown("<a style='text-decoration:none;' href='https://github.com/a16z-infra/cog-llama-template'><font size=4>GitHub to deploy LLaMA2 on Replicate</font></a>", unsafe_allow_html=True)
+st.sidebar.markdown('---') # Add a horizontal rule
 
 
 
