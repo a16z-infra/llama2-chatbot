@@ -3,7 +3,7 @@ LLaMA 2 Chatbot app
 ======================
 
 This is an Streamlit chatbot app with LLaMA2 that includes session chat history and option to select multiple LLM
-API enpoints on Replicate. Each model (7B & 13B) runs on Replicate on one A100 (80Gb). The weights have been tensorized.
+API enpoints on Replicate. Each model (7B & 13B) runs on Replicate on one A100 (40Gb). The weights have been tensorized.
 
 Author: Marco Mascorro (@mascobot.com)
 Created: July 2023
@@ -53,7 +53,7 @@ PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or prete
 MODEL = ''
 
 #Dropdown menu to select the model edpoint:
-selected_option = st.sidebar.selectbox('Choose a model:', ['LLaMA2_7B', 'LLaMA2_13B'], key='model')
+selected_option = st.sidebar.selectbox('Choose a model:', ['LLaMA2_13B', 'LLaMA2_7B'], key='model')
 if selected_option == 'LLaMA2_7B':
     MODEL = REPLICATE_MODEL_ENDPOINT7B
 else:
@@ -85,7 +85,10 @@ def replicate_client(prompt='', max_length=300, temperature=0.1, top_p=0.9, repe
     for item in output:
         # https://replicate.com/a16z-infra/llama13b-v2-chat/versions/56acad22679f6b95d6e45c78309a2b50a670d5ed29a37dd73d182e89772c02f1/api#output-schema
         #print(item)
-        response_tmp = response_tmp + item
+        if "user:" in item.lower():
+            break
+        else:
+            response_tmp = response_tmp + item
     return response_tmp
 
 #container for the chat history
