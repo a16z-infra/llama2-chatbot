@@ -61,5 +61,5 @@ The app has been styled and configured for a cleaner look. Main menu and footer 
 
 ## Resources
 
-- [GitHub to clone this chat web app](https://github.com/a16z-infra/llama2-chatbot)
+- [Streamlit Cheat Sheet](https://docs.streamlit.io/library/cheatsheet)
 - [GitHub to deploy LLaMA2 on Replicate](https://github.com/a16z-infra/cog-llama-template)
