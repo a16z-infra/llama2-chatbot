@@ -19,7 +19,7 @@ You can test the LLaMA 7B & 13B chat models and this app in www.LLaMA2.ai
 - Install dependencies with `pip install -r requirements.txt`
 - Copy the '.env_template' file to '.env' and add your Replicate API key
   - For your convenience, we intentionally include model endpoints in the '.env_template' file
-- You can also use Streamlit secrets by renaming the file `example_secrets.toml` to `secrets.toml` in `.streamlit/` folder
+- You can also use Streamlit secrets by renaming the `example_secrets.toml` file to `secrets.toml` in the `.streamlit/` folder
   - Add you Replicate API key in the secrets file
 - Run the app with `streamlit run llama2_chatbot.py`
 - Docker image included to [deploy this app](#deploying-on-flyio) in Fly.io
