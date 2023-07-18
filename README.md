@@ -51,11 +51,11 @@ This project is under development. Contributions are welcome!
 
 ## Acknowledgements
 
-- Special thanks to the team at Meta AI, Replicate, a16z-infra and the entire open source community.
+- Special thanks to the team at Meta AI, Replicate, a16z-infra and the entire open-source community.
 
 ## Disclaimer
 
-This is an experimental version of the app. Use at your own risk. While the app has been tested, the author holds no liability for any kind of losses arising out of using this application. 
+This is an experimental version of the app. Use at your own risk. While the app has been tested, the authors hold no liability for any kind of losses arising out of using this application. 
 
 ## UI Configuration
 
