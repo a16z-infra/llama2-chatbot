@@ -17,6 +17,7 @@ You can test the LLaMA 7B & 13B chat models and this app in www.LLaMA2.ai
 
 - Clone the repository
 - Install dependencies with `pip install -r requirements.txt`
+- Copy the '.env_template' file to '.env' and add your Replicate API key
 - Run the app with `streamlit run app.py`
 - Docker image included to deploy this app in Fly.io
 
