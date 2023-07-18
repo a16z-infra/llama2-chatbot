@@ -13,27 +13,6 @@ You can test the LLaMA 7B & 13B chat models and this app in www.LLaMA2.ai
 - Each model (7B & 13B) runs on Replicate - (One A100 (40Gb)).
 - Docker image included to deploy this app in Fly.io
 
-## Authors
-
-Marco Mascorro - [@mascobot](https://twitter.com/Mascobot)
-Yoko Li - [@stuffyokodraws](https://twitter.com/stuffyokodraws)
-Rajko Radovanović - [@rajko_rad](https://twitter.com/rajko_rad)
-Matt Bornstein - [@BornsteinMatt](https://twitter.com/BornsteinMatt)
-Guido Appenzeller - [@appenz](https://twitter.com/appenz)
-
-## Created
-
-July 2023
-
-## Version
-
-0.9.0 (Experimental)
-
-## Status
-
-Development
-
-
 ## Installation
 
 - Clone the repository
@@ -47,28 +26,35 @@ Development
 - Configure model hyperparameters from the sidebar.
 - Type your question in the input field at the bottom of the app and press enter.
 
+## Authors
+
+- Marco Mascorro - [@mascobot](https://twitter.com/Mascobot)
+- Yoko Li - [@stuffyokodraws](https://twitter.com/stuffyokodraws)
+- Rajko Radovanović - [@rajko_rad](https://twitter.com/rajko_rad)
+- Matt Bornstein - [@BornsteinMatt](https://twitter.com/BornsteinMatt)
+- Guido Appenzeller - [@appenz](https://twitter.com/appenz)
+
+## Version
+
+0.9.0 (Experimental) - July 2023
+
 ## Contributing
 
-This project is under development. Contributions are welcome. Please make sure to update tests as appropriate.
+This project is under development. Contributions are welcome!
 
 ## License
 
-Web chatbot license (this repo): Apache 2.0
-For the LLaMA models license, please refer to the License Agreement from Meta Platforms, Inc.
+- Web chatbot license (this repo): Apache 2.0
+- For the LLaMA models license, please refer to the License Agreement from Meta Platforms, Inc.
 
 ## Acknowledgements
 
 - Special thanks to the team at Meta AI, Replicate, a16z-infra and the entire open source community.
 
-## Contact
-
-For any queries, feel free to reach out to the author or open an issue.
-
 ## Disclaimer
 
 This is an experimental version of the app. Use at your own risk. While the app has been tested, the author holds no liability for any kind of losses arising out of using this application. 
 
-#
 ## UI Configuration
 
 The app has been styled and configured for a cleaner look. Main menu and footer visibility have been hidden. Feel free to modify this to your custom application.
