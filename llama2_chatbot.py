@@ -106,10 +106,7 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
         print (string_dialogue)
         output = debounce_replicate_run(st.session_state['llm'], string_dialogue + "Assistant: ",  st.session_state['max_seq_len'], st.session_state['temperature'], st.session_state['top_p'], REPLICATE_API_TOKEN)
         for item in output:
-            if "User:" in item:
-               break
-            else:
-                full_response += item
+            full_response += item
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     # Add assistant response to chat history
