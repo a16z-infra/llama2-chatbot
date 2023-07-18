@@ -14,13 +14,31 @@ a16z-infra
 """
 #External libraries:
 import streamlit as st
+import replicate
+from dotenv import load_dotenv
+load_dotenv()
 import os
 from utils import debounce_replicate_run
 
+# feel free to replace with your own logo
+logo1 = 'https://storage.googleapis.com/llama2_release/a16z_logo.png'
+logo2 = 'https://storage.googleapis.com/llama2_release/replicate_logo_white.png'
+
 ###Initial UI configuration:###
-st.set_page_config(page_title="LLaMA2 Chatbot by a16z-infra", page_icon="🧊", layout="wide")
+st.set_page_config(page_title="LLaMA2 Chatbot by a16z-infra", page_icon=logo1, layout="wide")
+
+# reduce font sizes for input text boxes
+custom_css = """
+    <style>
+        .stTextArea textarea {font-size: 13px;}
+        div[data-baseweb="select"] > div {font-size: 13px !important;}
+    </style>
+"""
+st.markdown(custom_css, unsafe_allow_html=True)
+
+
 st.sidebar.header("LLaMA2 Chatbot")#Left sidebar menu
-st.sidebar.markdown('**by a16z Infra**')
+
 #Set config for a cleaner menu, footer & background:
 hide_streamlit_style = """
             <style>
@@ -36,6 +54,7 @@ REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
 REPLICATE_MODEL_ENDPOINT7B = os.environ.get('REPLICATE_MODEL_ENDPOINT7B', default='')
 REPLICATE_MODEL_ENDPOINT13B = os.environ.get('REPLICATE_MODEL_ENDPOINT13B', default='')
 PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant.\n\n"
+
 #container for the chat history
 response_container = st.container()
 #container for the user's text input
@@ -73,6 +92,7 @@ if NEW_P != PRE_PROMPT and NEW_P != "" and NEW_P != None:
 else:
     st.session_state['pre_prompt'] = PRE_PROMPT
 
+
 # Add the "Clear Chat History" button to the sidebar
 clear_chat_history_button = st.sidebar.button("Clear Chat History")
 
@@ -81,6 +101,46 @@ if clear_chat_history_button:
     # Reset the chat history stored in the session state
     st.session_state['chat_dialogue'] = []
     
+    
+# add links to relevant resources for users to select
+text1 = 'Chatbot Demo Code' 
+text2 = 'Model on Replicate' 
+text3 = 'LLaMa2 Cog Template'
+
+logo1_link = "https://github.com/a16z-infra/llama2-chatbot"
+logo2_link = "https://replicate.com/a16z-infra/llama13b-v2-chat"
+text3_link = "https://github.com/a16z-infra/cog-llama-template"
+
+st.sidebar.markdown(f"""
+<div class='resources-section'>
+    <h3>Resources:</h3>
+    <div style="display: flex; justify-content: space-between;">
+        <div style="display: flex; flex-direction: column; padding-left: 15px;">
+            <div style="align-self: flex-start; padding-bottom: 5px;"> <!-- Change to flex-start here -->
+                <a href="{logo1_link}">
+                    <img src="{logo1}" alt="Logo 1" style="width: 30px;"/>
+                </a>
+            </div>
+            <div style="align-self: flex-start;">
+                <p style="font-size:11px; margin-bottom: -5px;"><a href="{logo1_link}">{text1}</a></p>
+                <p style="font-size:11px;"><a href="{text3_link}">{text3}</a></p>  <!-- second line of text -->
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; padding-right: 25px;">
+            <div style="align-self: flex-start; padding-bottom: 5px;">
+                <a href="{logo2_link}">
+                    <img src="{logo2}" alt="Logo 2" style="width: 120px;"/>
+                </a>
+            </div>
+            <div style="align-self: flex-start;">
+                <p style="font-size:11px;"><a href="{logo2_link}">{text2}</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+
 # Display chat messages from history on app rerun
 for message in st.session_state.chat_dialogue:
     with st.chat_message(message["role"]):
@@ -111,31 +171,6 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
         message_placeholder.markdown(full_response)
     # Add assistant response to chat history
     st.session_state.chat_dialogue.append({"role": "assistant", "content": full_response})
-
-##Add a sidebar with Resources:
-st.sidebar.header('**Resources:**')
-st.sidebar.markdown("<a style='text-decoration:none;' href='https://github.com/a16z-infra/llama2-chatbot'><font size=4>GitHub to clone this chat web app</font></a>", unsafe_allow_html=True)
-st.sidebar.markdown("<a style='text-decoration:none;' href='https://github.com/a16z-infra/cog-llama-template'><font size=4>GitHub to deploy LLaMA2 on Replicate</font></a>", unsafe_allow_html=True)
-st.sidebar.markdown('---') # Add a horizontal rule
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
