@@ -53,7 +53,7 @@ REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
 #Your your (Replicate) models' endpoints:
 REPLICATE_MODEL_ENDPOINT7B = os.environ.get('REPLICATE_MODEL_ENDPOINT7B', default='')
 REPLICATE_MODEL_ENDPOINT13B = os.environ.get('REPLICATE_MODEL_ENDPOINT13B', default='')
-PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant.\n\n"
+PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
 
 #container for the chat history
 response_container = st.container()
@@ -86,7 +86,7 @@ st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.
 st.session_state['top_p'] = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
 st.session_state['max_seq_len'] = st.sidebar.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
 
-NEW_P = st.sidebar.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=130)
+NEW_P = st.sidebar.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
 if NEW_P != PRE_PROMPT and NEW_P != "" and NEW_P != None:
     st.session_state['pre_prompt'] = NEW_P + "\n\n"
 else:
