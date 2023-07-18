@@ -73,6 +73,14 @@ if NEW_P != PRE_PROMPT and NEW_P != "" and NEW_P != None:
 else:
     st.session_state['pre_prompt'] = PRE_PROMPT
 
+# Add the "Clear Chat History" button to the sidebar
+clear_chat_history_button = st.sidebar.button("Clear Chat History")
+
+# Check if the button is clicked
+if clear_chat_history_button:
+    # Reset the chat history stored in the session state
+    st.session_state['chat_dialogue'] = []
+    
 # Display chat messages from history on app rerun
 for message in st.session_state.chat_dialogue:
     with st.chat_message(message["role"]):
