@@ -60,45 +60,28 @@ if not (REPLICATE_API_TOKEN and REPLICATE_MODEL_ENDPOINT13B and REPLICATE_MODEL_
     st.warning("Add a `.env` file to your app directory with the keys specified in `.env_template` to continue.")
     st.stop()
 
-#container for the chat history
-response_container = st.container()
-#container for the user's text input
-container = st.container()
 #Set up/Initialize Session State variables:
 if 'chat_dialogue' not in st.session_state:
     st.session_state['chat_dialogue'] = []
-if 'llm' not in st.session_state:
-    #st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT70B
-if 'temperature' not in st.session_state:
-    st.session_state['temperature'] = 0.1
-if 'top_p' not in st.session_state:
-    st.session_state['top_p'] = 0.9
-if 'max_seq_len' not in st.session_state:
-    st.session_state['max_seq_len'] = 512
-if 'pre_prompt' not in st.session_state:
-    st.session_state['pre_prompt'] = PRE_PROMPT
-if 'string_dialogue' not in st.session_state:
-    st.session_state['string_dialogue'] = ''
 
 #Dropdown menu to select the model edpoint:
-selected_option = st.sidebar.selectbox('Choose a LLaMA2 model:', ['LLaMA2-70B', 'LLaMA2-13B', 'LLaMA2-7B'], key='model')
+selected_option = st.sidebar.selectbox('Choose a LLaMA2 model:', ['LLaMA2-70B', 'LLaMA2-13B', 'LLaMA2-7B'])
 if selected_option == 'LLaMA2-7B':
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT7B
+    llm = REPLICATE_MODEL_ENDPOINT7B
 elif selected_option == 'LLaMA2-13B':
     st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
 else:
     st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT70B
-#Model hyper parameters:
-st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
-st.session_state['top_p'] = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
-st.session_state['max_seq_len'] = st.sidebar.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
 
-NEW_P = st.sidebar.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
-if NEW_P != PRE_PROMPT and NEW_P != "" and NEW_P != None:
-    st.session_state['pre_prompt'] = NEW_P + "\n\n"
-else:
-    st.session_state['pre_prompt'] = PRE_PROMPT
+#Model hyper parameters:
+temperature = st.sidebar.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
+top_p = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
+max_seq_len = st.sidebar.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
+
+pre_prompt = st.sidebar.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
+if pre_prompt == "" or pre_prompt is None:
+    pre_prompt = PRE_PROMPT
+pre_prompt += '\n\n'
 
 
 # Add the "Clear Chat History" button to the sidebar
@@ -165,20 +148,17 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
-        string_dialogue = st.session_state['pre_prompt']
+        string_dialogue = pre_prompt
         for dict_message in st.session_state.chat_dialogue:
             if dict_message["role"] == "user":
                 string_dialogue = string_dialogue + "User: " + dict_message["content"] + "\n\n"
             else:
                 string_dialogue = string_dialogue + "Assistant: " + dict_message["content"] + "\n\n"
         print (string_dialogue)
-        output = debounce_replicate_run(st.session_state['llm'], string_dialogue + "Assistant: ",  st.session_state['max_seq_len'], st.session_state['temperature'], st.session_state['top_p'], REPLICATE_API_TOKEN)
+        output = debounce_replicate_run(llm, string_dialogue + "Assistant: ",  max_seq_len, temperature, top_p, REPLICATE_API_TOKEN)
         for item in output:
             full_response += item
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     # Add assistant response to chat history
     st.session_state.chat_dialogue.append({"role": "assistant", "content": full_response})
-
-
-
