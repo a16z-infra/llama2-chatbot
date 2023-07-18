@@ -63,7 +63,7 @@ if selected_option == 'LLaMA2-7B':
 else:
     st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
 #Model hyper parameters:
-st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.01, max_value=1.0, value=0.1, step=0.01)
+st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
 st.session_state['top_p'] = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
 st.session_state['max_seq_len'] = st.sidebar.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
 
