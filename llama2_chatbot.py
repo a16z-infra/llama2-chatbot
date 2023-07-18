@@ -36,9 +36,6 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-
-st.sidebar.header("LLaMA2 Chatbot")#Left sidebar menu
-
 #Set config for a cleaner menu, footer & background:
 hide_streamlit_style = """
             <style>
@@ -56,42 +53,37 @@ REPLICATE_MODEL_ENDPOINT13B = os.environ.get('REPLICATE_MODEL_ENDPOINT13B', defa
 REPLICATE_MODEL_ENDPOINT70B = os.environ.get('REPLICATE_MODEL_ENDPOINT70B', default='')
 PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
 
-if not (REPLICATE_API_TOKEN and REPLICATE_MODEL_ENDPOINT13B and REPLICATE_MODEL_ENDPOINT7B):
+if not (REPLICATE_API_TOKEN and REPLICATE_MODEL_ENDPOINT70B and REPLICATE_MODEL_ENDPOINT13B and REPLICATE_MODEL_ENDPOINT7B):
     st.warning("Add a `.env` file to your app directory with the keys specified in `.env_template` to continue.")
     st.stop()
 
 #Set up/Initialize Session State variables:
-if 'chat_dialogue' not in st.session_state:
-    st.session_state['chat_dialogue'] = []
 
-#Dropdown menu to select the model edpoint:
-selected_option = st.sidebar.selectbox('Choose a LLaMA2 model:', ['LLaMA2-70B', 'LLaMA2-13B', 'LLaMA2-7B'])
-if selected_option == 'LLaMA2-7B':
-    llm = REPLICATE_MODEL_ENDPOINT7B
-elif selected_option == 'LLaMA2-13B':
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
-else:
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT70B
+with st.sidebar:
+    st.header("LLaMA2 Chatbot")#Left sidebar menu
 
-#Model hyper parameters:
-temperature = st.sidebar.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
-top_p = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
-max_seq_len = st.sidebar.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
+    #Dropdown menu to select the model endpoint:
+    models = {
+        'LLaMA2-70B': REPLICATE_MODEL_ENDPOINT70B,
+        'LLaMA2-13B': REPLICATE_MODEL_ENDPOINT7B,
+        'LLaMA2-7B': REPLICATE_MODEL_ENDPOINT13B
+    }
+    selected_option = st.selectbox('Choose a LLaMA2 model:', models.keys())
+    llm = models[selected_option]
 
-pre_prompt = st.sidebar.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
-if pre_prompt == "" or pre_prompt is None:
-    pre_prompt = PRE_PROMPT
-pre_prompt += '\n\n'
+    #Model hyper parameters:
+    temperature = st.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
+    top_p = st.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
+    max_seq_len = st.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
 
+    pre_prompt = st.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
+    if pre_prompt == "" or pre_prompt is None:
+        pre_prompt = PRE_PROMPT
+    pre_prompt += '\n\n'
 
-# Add the "Clear Chat History" button to the sidebar
-clear_chat_history_button = st.sidebar.button("Clear Chat History")
-
-# Check if the button is clicked
-if clear_chat_history_button:
-    # Reset the chat history stored in the session state
-    st.session_state['chat_dialogue'] = []
-    
+    # Initialize or reset the chat history stored in the session state
+    if 'chat_dialogue' not in st.session_state or st.button("Clear Chat History"):
+        st.session_state.chat_dialogue = []
     
 # add links to relevant resources for users to select
 text1 = 'Chatbot Demo Code' 
