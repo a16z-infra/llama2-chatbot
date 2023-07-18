@@ -15,7 +15,8 @@ a16z-infra
 #External libraries:
 import streamlit as st
 import os
-import replicate
+from utils import debounce_replicate_run
+
 ###Initial UI configuration:###
 st.set_page_config(page_title="LLaMA2 Chatbot by a16z-infra", page_icon="🧊", layout="wide")
 st.sidebar.header("LLaMA2 Chatbot")#Left sidebar menu
@@ -95,7 +96,7 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
             else:
                 string_dialogue = string_dialogue + "Assistant: " + dict_message["content"] + "\n\n"
         print (string_dialogue)
-        output = replicate.run(st.session_state['llm'], input={"prompt": string_dialogue + "Assistant: ", "max_length": st.session_state['max_seq_len'], "temperature": st.session_state['temperature'], "top_p": st.session_state['top_p'], "repetition_penalty": 1}, api_token=REPLICATE_API_TOKEN)
+        output = debounce_replicate_run(st.session_state['llm'], string_dialogue + "Assistant: ",  st.session_state['max_seq_len'], st.session_state['temperature'], st.session_state['top_p'], REPLICATE_API_TOKEN)
         for item in output:
             if "user:" in item.lower():
                 break
