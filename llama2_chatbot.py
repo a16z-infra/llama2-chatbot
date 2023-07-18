@@ -14,13 +14,11 @@ a16z-infra
 """
 #External libraries:
 import streamlit as st
-import os
 import replicate
 from dotenv import load_dotenv
-import base64
-
 load_dotenv()
 import os
+from utils import debounce_replicate_run
 
 # feel free to replace with your own logo
 logo1 = 'https://storage.googleapis.com/llama2_release/a16z_logo.png'
@@ -84,7 +82,7 @@ if selected_option == 'LLaMA2-7B':
 else:
     st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
 #Model hyper parameters:
-st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.01, max_value=1.0, value=0.1, step=0.01)
+st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
 st.session_state['top_p'] = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
 st.session_state['max_seq_len'] = st.sidebar.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
 
@@ -95,6 +93,15 @@ else:
     st.session_state['pre_prompt'] = PRE_PROMPT
 
 
+# Add the "Clear Chat History" button to the sidebar
+clear_chat_history_button = st.sidebar.button("Clear Chat History")
+
+# Check if the button is clicked
+if clear_chat_history_button:
+    # Reset the chat history stored in the session state
+    st.session_state['chat_dialogue'] = []
+    
+    
 # add links to relevant resources for users to select
 text1 = 'Chatbot Demo Code' 
 text2 = 'Model on Replicate' 
@@ -134,7 +141,6 @@ st.sidebar.markdown(f"""
 """, unsafe_allow_html=True)
 
 
-
 # Display chat messages from history on app rerun
 for message in st.session_state.chat_dialogue:
     with st.chat_message(message["role"]):
@@ -158,7 +164,7 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
             else:
                 string_dialogue = string_dialogue + "Assistant: " + dict_message["content"] + "\n\n"
         print (string_dialogue)
-        output = replicate.run(st.session_state['llm'], input={"prompt": string_dialogue + "Assistant: ", "max_length": st.session_state['max_seq_len'], "temperature": st.session_state['temperature'], "top_p": st.session_state['top_p'], "repetition_penalty": 1}, api_token=REPLICATE_API_TOKEN)
+        output = debounce_replicate_run(st.session_state['llm'], string_dialogue + "Assistant: ",  st.session_state['max_seq_len'], st.session_state['temperature'], st.session_state['top_p'], REPLICATE_API_TOKEN)
         for item in output:
             if "User:" in item:
                break
