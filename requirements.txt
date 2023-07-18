@@ -27,6 +27,7 @@ pydeck==0.8.1b0
 Pygments==2.15.1
 Pympler==1.0.1
 python-dateutil==2.8.2
+python-dotenv==1.0.0
 pytz==2023.3
 pytz-deprecation-shim==0.1.0.post0
 referencing==0.29.1

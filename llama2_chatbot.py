@@ -108,7 +108,7 @@ st.sidebar.markdown(f"""
 <div class='resources-section'>
     <h3>Resources:</h3>
     <div style="display: flex; justify-content: space-between;">
-        <div style="display: flex; flex-direction: column; padding-left: 20px;">
+        <div style="display: flex; flex-direction: column; padding-left: 15px;">
             <div style="align-self: flex-start; padding-bottom: 5px;"> <!-- Change to flex-start here -->
                 <a href="{logo1_link}">
                     <img src="{logo1}" alt="Logo 1" style="width: 30px;"/>
