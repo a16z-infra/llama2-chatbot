@@ -1,6 +1,6 @@
 # LLaMA 2 Chatbot App
 
-This is an experimental Streamlit chatbot app built for LLaMA2 (or any other LLM). The app includes session chat history and provides an option to select multiple LLaMA2 API endpoints on Replicate. 
+This is an experimental Streamlit chatbot app built for LLaMA2 (or any other LLM). The app includes session chat history and provides an option to select multiple LLaMA2 API endpoints on Replicate.
 
 You can test the LLaMA 7B & 13B chat models and this app in www.LLaMA2.ai
 
@@ -18,7 +18,9 @@ You can test the LLaMA 7B & 13B chat models and this app in www.LLaMA2.ai
 - Clone the repository
 - Install dependencies with `pip install -r requirements.txt`
 - Copy the '.env_template' file to '.env' and add your Replicate API key
-    - For your convenience, we intentionally include model endpoints in the '.env_template' file
+  - For your convenience, we intentionally include model endpoints in the '.env_template' file
+- You can also use Streamlit secrets by renaming the file `example_secrets.toml` to `secrets.toml` in `.streamlit/` folder
+  - Add you Replicate API key in the secrets file
 - Run the app with `streamlit run llama2_chatbot.py`
 - Docker image included to [deploy this app](#deploying-on-flyio) in Fly.io
 
@@ -29,10 +31,15 @@ You can test the LLaMA 7B & 13B chat models and this app in www.LLaMA2.ai
 - Type your question in the input field at the bottom of the app and press enter.
 
 ## Deploying on fly.io
+
 1. First you should [install flyctl](https://fly.io/docs/hands-on/install-flyctl/) and login from command line
 2. `fly launch` -> this will generate a fly.toml for you automatically
 3. `fly deploy --dockerfile Dockerfile` --> this will automatically package up the repo and deploy it on fly. If you have a free account, you can use `--ha=false` flag to only spin up one instance
-4. Go to your deployed fly app dashboard, click on `Secrets` from the left hand side nav, and click on `Use the Web CLI to manage your secrets without leaving your browser`. Once you are on your app's web CLI, export all secrets needed. i.e `export REPLICATE_API_TOKEN=your_replicate_token`. Refer to .env.example file for necessary secrets. 
+4. Go to your deployed fly app dashboard, click on `Secrets` from the left hand side nav, and click on `Use the Web CLI to manage your secrets without leaving your browser`. Once you are on your app's web CLI, export all secrets needed. i.e `export REPLICATE_API_TOKEN=your_replicate_token`. Refer to .env.example file for necessary secrets.
+
+## Deploying to Streamlit Community Cloud
+
+- Detailed deployment instructions can be found in the [Streamlit docs](https://docs.streamlit.io/streamlit-community-cloud/get-started/deploy-an-app)
 
 ## Authors
 
@@ -61,7 +68,7 @@ This project is under development. Contributions are welcome!
 
 ## Disclaimer
 
-This is an experimental version of the app. Use at your own risk. While the app has been tested, the authors hold no liability for any kind of losses arising out of using this application. 
+This is an experimental version of the app. Use at your own risk. While the app has been tested, the authors hold no liability for any kind of losses arising out of using this application.
 
 ## UI Configuration
 
