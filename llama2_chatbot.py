@@ -65,8 +65,8 @@ with st.sidebar:
     #Dropdown menu to select the model endpoint:
     models = {
         'LLaMA2-70B': REPLICATE_MODEL_ENDPOINT70B,
-        'LLaMA2-13B': REPLICATE_MODEL_ENDPOINT7B,
-        'LLaMA2-7B': REPLICATE_MODEL_ENDPOINT13B
+        'LLaMA2-13B': REPLICATE_MODEL_ENDPOINT13B,
+        'LLaMA2-7B': REPLICATE_MODEL_ENDPOINT7B
     }
     selected_option = st.selectbox('Choose a LLaMA2 model:', models.keys())
     llm = models[selected_option]
