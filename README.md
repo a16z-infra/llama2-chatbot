@@ -4,7 +4,7 @@
 
 This is an experimental Streamlit chatbot app built for LLaMA2 (or any other LLM). The app includes session chat history and provides an option to select multiple LLaMA2 API endpoints on Replicate. 
 
-You can test the LLaMA 7B & 13B chat models and this app in www.LLaMA2.ai
+You can test the LLaMA 7B & 13B chat models and this app in https://LLaMA2.ai
 
 ## Features
 
