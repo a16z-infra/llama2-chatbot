@@ -12,20 +12,21 @@ Status: Development
 Python version: 3.9.15
 a16z-infra
 """
-#External libraries:
+# External libraries:
+from utils import debounce_replicate_run
+import os
 import streamlit as st
 import replicate
 from dotenv import load_dotenv
 load_dotenv()
-import os
-from utils import debounce_replicate_run
 
 # feel free to replace with your own logo
 logo1 = 'https://storage.googleapis.com/llama2_release/a16z_logo.png'
 logo2 = 'https://storage.googleapis.com/llama2_release/replicate_logo_white.png'
 
-###Initial UI configuration:###
-st.set_page_config(page_title="LLaMA2 Chatbot by a16z-infra", page_icon=logo1, layout="wide")
+### Initial UI configuration:###
+st.set_page_config(page_title="LLaMA2 Chatbot by a16z-infra",
+                   page_icon=logo1, layout="wide")
 
 # reduce font sizes for input text boxes
 custom_css = """
@@ -36,10 +37,7 @@ custom_css = """
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
-
-st.sidebar.header("LLaMA2 Chatbot")#Left sidebar menu
-
-#Set config for a cleaner menu, footer & background:
+# Set config for a cleaner menu, footer & background:
 hide_streamlit_style = """
             <style>
             #MainMenu {visibility: hidden;}
@@ -48,63 +46,57 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-###Global variables:###
+### Global variables using os.environ:###
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
-#Your your (Replicate) models' endpoints:
-REPLICATE_MODEL_ENDPOINT7B = os.environ.get('REPLICATE_MODEL_ENDPOINT7B', default='')
-REPLICATE_MODEL_ENDPOINT13B = os.environ.get('REPLICATE_MODEL_ENDPOINT13B', default='')
+# Your your (Replicate) models' endpoints:
+REPLICATE_MODEL_ENDPOINT7B = os.environ.get(
+    "REPLICATE_MODEL_ENDPOINT7B", default='')
+REPLICATE_MODEL_ENDPOINT13B = os.environ.get(
+    "REPLICATE_MODEL_ENDPOINT13B", default='')
 PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
 
-#container for the chat history
-response_container = st.container()
-#container for the user's text input
-container = st.container()
-#Set up/Initialize Session State variables:
-if 'chat_dialogue' not in st.session_state:
-    st.session_state['chat_dialogue'] = []
-if 'llm' not in st.session_state:
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
-if 'temperature' not in st.session_state:
-    st.session_state['temperature'] = 0.1
-if 'top_p' not in st.session_state:
-    st.session_state['top_p'] = 0.9
-if 'max_seq_len' not in st.session_state:
-    st.session_state['max_seq_len'] = 512
-if 'pre_prompt' not in st.session_state:
-    st.session_state['pre_prompt'] = PRE_PROMPT
-if 'string_dialogue' not in st.session_state:
-    st.session_state['string_dialogue'] = ''
 
-#Dropdown menu to select the model edpoint:
-selected_option = st.sidebar.selectbox('Choose a LLaMA2 model:', ['LLaMA2-13B', 'LLaMA2-7B'], key='model')
-if selected_option == 'LLaMA2-7B':
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT7B
-else:
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
-#Model hyper parameters:
-st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
-st.session_state['top_p'] = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
-st.session_state['max_seq_len'] = st.sidebar.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
+# Uncomment to use Streamlit Secrets
+# ### Global variables using Streamlit st.secrets:###
+# REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
+# # Your your (Replicate) models' endpoints:
+# REPLICATE_MODEL_ENDPOINT7B = st.secrets["REPLICATE_MODEL_ENDPOINT7B"]
+# REPLICATE_MODEL_ENDPOINT13B = st.secrets["REPLICATE_MODEL_ENDPOINT13B"]
+# PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
 
-NEW_P = st.sidebar.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
-if NEW_P != PRE_PROMPT and NEW_P != "" and NEW_P != None:
-    st.session_state['pre_prompt'] = NEW_P + "\n\n"
-else:
-    st.session_state['pre_prompt'] = PRE_PROMPT
+with st.sidebar:
+    st.header("LLaMA2 Chatbot")  # Left sidebar menu
+
+    # Dropdown menu to select the model endpoint:
+    models = {
+        'LLaMA2-13B': REPLICATE_MODEL_ENDPOINT7B,
+        'LLaMA2-7B': REPLICATE_MODEL_ENDPOINT13B
+    }
+    selected_option = st.selectbox('Choose a LLaMA2 model:', models.keys())
+    llm = models[selected_option]
+
+    # Model hyper parameters:
+    temperature = st.slider('Temperature:', min_value=0.01,
+                            max_value=5.0, value=0.1, step=0.01)
+    top_p = st.slider('Top P:', min_value=0.01,
+                      max_value=1.0, value=0.9, step=0.01)
+    max_seq_len = st.slider('Max Sequence Length:',
+                            min_value=64, max_value=4096, value=2048, step=8)
+
+    pre_prompt = st.text_area(
+        'Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
+    if pre_prompt == "" or pre_prompt is None:
+        pre_prompt = PRE_PROMPT
+    pre_prompt += '\n\n'
+
+    # Initialize or reset the chat history stored in the session state
+    if 'chat_dialogue' not in st.session_state or st.button("Clear Chat History"):
+        st.session_state.chat_dialogue = []
 
 
-# Add the "Clear Chat History" button to the sidebar
-clear_chat_history_button = st.sidebar.button("Clear Chat History")
-
-# Check if the button is clicked
-if clear_chat_history_button:
-    # Reset the chat history stored in the session state
-    st.session_state['chat_dialogue'] = []
-    
-    
 # add links to relevant resources for users to select
-text1 = 'Chatbot Demo Code' 
-text2 = 'Model on Replicate' 
+text1 = 'Chatbot Demo Code'
+text2 = 'Model on Replicate'
 text3 = 'LLaMa2 Cog Template'
 
 logo1_link = "https://github.com/a16z-infra/llama2-chatbot"
@@ -153,24 +145,25 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
     # Display user message in chat message container
     with st.chat_message("user"):
         st.markdown(prompt)
-    
+
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
-        string_dialogue = st.session_state['pre_prompt']
+        string_dialogue = pre_prompt
         for dict_message in st.session_state.chat_dialogue:
             if dict_message["role"] == "user":
-                string_dialogue = string_dialogue + "User: " + dict_message["content"] + "\n\n"
+                string_dialogue = string_dialogue + \
+                    "User: " + dict_message["content"] + "\n\n"
             else:
-                string_dialogue = string_dialogue + "Assistant: " + dict_message["content"] + "\n\n"
-        print (string_dialogue)
-        output = debounce_replicate_run(st.session_state['llm'], string_dialogue + "Assistant: ",  st.session_state['max_seq_len'], st.session_state['temperature'], st.session_state['top_p'], REPLICATE_API_TOKEN)
+                string_dialogue = string_dialogue + \
+                    "Assistant: " + dict_message["content"] + "\n\n"
+        print(string_dialogue)
+        output = debounce_replicate_run(
+            llm, string_dialogue + "Assistant: ", max_seq_len, temperature, top_p, REPLICATE_API_TOKEN)
         for item in output:
             full_response += item
             message_placeholder.markdown(full_response + "▌")
         message_placeholder.markdown(full_response)
     # Add assistant response to chat history
-    st.session_state.chat_dialogue.append({"role": "assistant", "content": full_response})
-
-
-
+    st.session_state.chat_dialogue.append(
+        {"role": "assistant", "content": full_response})
