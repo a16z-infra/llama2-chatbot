@@ -13,12 +13,12 @@ Python version: 3.9.15
 a16z-infra
 """
 # External libraries:
+from utils import debounce_replicate_run
+import os
 import streamlit as st
 import replicate
-# from dotenv import load_dotenv
-# load_dotenv()
-import os
-from utils import debounce_replicate_run
+from dotenv import load_dotenv
+load_dotenv()
 
 # feel free to replace with your own logo
 logo1 = 'https://storage.googleapis.com/llama2_release/a16z_logo.png'
@@ -46,25 +46,28 @@ hide_streamlit_style = """
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-#### Global variables using os.environ:###
-# REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
+### Global variables using os.environ:###
+REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
 # Your your (Replicate) models' endpoints:
-# REPLICATE_MODEL_ENDPOINT7B = os.environ.get("REPLICATE_MODEL_ENDPOINT7B", default='')
-# REPLICATE_MODEL_ENDPOINT13B = os.environ.get("REPLICATE_MODEL_ENDPOINT13B", default='')
-# PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
-
-
-### Global variables using st.secrets:###
-REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
-# Your your (Replicate) models' endpoints:
-REPLICATE_MODEL_ENDPOINT7B = st.secrets["REPLICATE_MODEL_ENDPOINT7B"]
-REPLICATE_MODEL_ENDPOINT13B = st.secrets["REPLICATE_MODEL_ENDPOINT13B"]
+REPLICATE_MODEL_ENDPOINT7B = os.environ.get(
+    "REPLICATE_MODEL_ENDPOINT7B", default='')
+REPLICATE_MODEL_ENDPOINT13B = os.environ.get(
+    "REPLICATE_MODEL_ENDPOINT13B", default='')
 PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
 
-with st.sidebar:
-    st.header("LLaMA2 Chatbot")#Left sidebar menu
 
-    #Dropdown menu to select the model endpoint:
+# Uncomment to use Streamlit Secrets
+# ### Global variables using Streamlit st.secrets:###
+# REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
+# # Your your (Replicate) models' endpoints:
+# REPLICATE_MODEL_ENDPOINT7B = st.secrets["REPLICATE_MODEL_ENDPOINT7B"]
+# REPLICATE_MODEL_ENDPOINT13B = st.secrets["REPLICATE_MODEL_ENDPOINT13B"]
+# PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
+
+with st.sidebar:
+    st.header("LLaMA2 Chatbot")  # Left sidebar menu
+
+    # Dropdown menu to select the model endpoint:
     models = {
         'LLaMA2-13B': REPLICATE_MODEL_ENDPOINT7B,
         'LLaMA2-7B': REPLICATE_MODEL_ENDPOINT13B
@@ -72,12 +75,16 @@ with st.sidebar:
     selected_option = st.selectbox('Choose a LLaMA2 model:', models.keys())
     llm = models[selected_option]
 
-    #Model hyper parameters:
-    temperature = st.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
-    top_p = st.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
-    max_seq_len = st.slider('Max Sequence Length:', min_value=64, max_value=4096, value=2048, step=8)
+    # Model hyper parameters:
+    temperature = st.slider('Temperature:', min_value=0.01,
+                            max_value=5.0, value=0.1, step=0.01)
+    top_p = st.slider('Top P:', min_value=0.01,
+                      max_value=1.0, value=0.9, step=0.01)
+    max_seq_len = st.slider('Max Sequence Length:',
+                            min_value=64, max_value=4096, value=2048, step=8)
 
-    pre_prompt = st.text_area('Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
+    pre_prompt = st.text_area(
+        'Prompt before the chat starts. Edit here if desired:', PRE_PROMPT, height=60)
     if pre_prompt == "" or pre_prompt is None:
         pre_prompt = PRE_PROMPT
     pre_prompt += '\n\n'
@@ -151,7 +158,8 @@ if prompt := st.chat_input("Type your question here to talk to LLaMA2"):
                 string_dialogue = string_dialogue + \
                     "Assistant: " + dict_message["content"] + "\n\n"
         print(string_dialogue)
-        output = debounce_replicate_run(llm, string_dialogue + "Assistant: ", max_seq_len, temperature, top_p, REPLICATE_API_TOKEN)
+        output = debounce_replicate_run(
+            llm, string_dialogue + "Assistant: ", max_seq_len, temperature, top_p, REPLICATE_API_TOKEN)
         for item in output:
             full_response += item
             message_placeholder.markdown(full_response + "▌")
