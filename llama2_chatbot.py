@@ -3,7 +3,7 @@ LLaMA 2 Chatbot app
 ======================
 
 This is an Streamlit chatbot app with LLaMA2 that includes session chat history and option to select multiple LLM
-API enpoints on Replicate. Each model (7B & 13B) runs on Replicate on one A100 (40Gb). The weights have been tensorized.
+API enpoints on Replicate. Each model (7B, 13B & 70B) runs on Replicate on one A100 (40Gb). The weights have been tensorized.
 
 Author: Marco Mascorro (@mascobot.com)
 Created: July 2023
@@ -53,6 +53,7 @@ REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
 #Your your (Replicate) models' endpoints:
 REPLICATE_MODEL_ENDPOINT7B = os.environ.get('REPLICATE_MODEL_ENDPOINT7B', default='')
 REPLICATE_MODEL_ENDPOINT13B = os.environ.get('REPLICATE_MODEL_ENDPOINT13B', default='')
+REPLICATE_MODEL_ENDPOINT70B = os.environ.get('REPLICATE_MODEL_ENDPOINT70B', default='')
 PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
 
 #container for the chat history
@@ -63,7 +64,8 @@ container = st.container()
 if 'chat_dialogue' not in st.session_state:
     st.session_state['chat_dialogue'] = []
 if 'llm' not in st.session_state:
-    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
+    #st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
+    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT70B
 if 'temperature' not in st.session_state:
     st.session_state['temperature'] = 0.1
 if 'top_p' not in st.session_state:
@@ -76,11 +78,13 @@ if 'string_dialogue' not in st.session_state:
     st.session_state['string_dialogue'] = ''
 
 #Dropdown menu to select the model edpoint:
-selected_option = st.sidebar.selectbox('Choose a LLaMA2 model:', ['LLaMA2-13B', 'LLaMA2-7B'], key='model')
+selected_option = st.sidebar.selectbox('Choose a LLaMA2 model:', ['LLaMA2-70B', 'LLaMA2-13B', 'LLaMA2-7B'], key='model')
 if selected_option == 'LLaMA2-7B':
     st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT7B
-else:
+elif selected_option == 'LLaMA2-13B':
     st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT13B
+else:
+    st.session_state['llm'] = REPLICATE_MODEL_ENDPOINT70B
 #Model hyper parameters:
 st.session_state['temperature'] = st.sidebar.slider('Temperature:', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
 st.session_state['top_p'] = st.sidebar.slider('Top P:', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
