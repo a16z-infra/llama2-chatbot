@@ -56,6 +56,10 @@ REPLICATE_MODEL_ENDPOINT13B = os.environ.get('REPLICATE_MODEL_ENDPOINT13B', defa
 REPLICATE_MODEL_ENDPOINT70B = os.environ.get('REPLICATE_MODEL_ENDPOINT70B', default='')
 PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as Assistant."
 
+if not (REPLICATE_API_TOKEN and REPLICATE_MODEL_ENDPOINT13B and REPLICATE_MODEL_ENDPOINT7B):
+    st.warning("Add a `.env` file to your app directory with the keys specified in `.env_template` to continue.")
+    st.stop()
+
 #container for the chat history
 response_container = st.container()
 #container for the user's text input
