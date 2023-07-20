@@ -9,7 +9,7 @@ You can test the LLaMA 7B, 13B & 70B chat models and this app in https://LLaMA2.
 ## Features
 
 - Chat history is maintained for each session (if you refresh, chat history clears)
-- Option to select between different LLaMA2 chat API endpoints (7B or 13B). Default is 13B.
+- Option to select between different LLaMA2 chat API endpoints (7B, 13B or 70B). Default is 70B.
 - Configure model hyperparameters from the sidebar (Temperature, Top P, Max Sequence Length).
 - Includes "User:" and "Assistant:" prompts for the chat conversation.
 - Each model (7B, 13B & 70BB) runs on Replicate - (7B and 13B run on one A100 40Gb, and 70B runs on one A100 80Gb).
