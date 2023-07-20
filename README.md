@@ -4,7 +4,7 @@
 
 This is an experimental Streamlit chatbot app built for LLaMA2 (or any other LLM). The app includes session chat history and provides an option to select multiple LLaMA2 API endpoints on Replicate. 
 
-You can test the LLaMA 7B & 13B chat models and this app in https://LLaMA2.ai
+You can test the LLaMA 7B, 13B & 70B chat models and this app in https://LLaMA2.ai
 
 ## Features
 
@@ -12,7 +12,7 @@ You can test the LLaMA 7B & 13B chat models and this app in https://LLaMA2.ai
 - Option to select between different LLaMA2 chat API endpoints (7B or 13B). Default is 13B.
 - Configure model hyperparameters from the sidebar (Temperature, Top P, Max Sequence Length).
 - Includes "User:" and "Assistant:" prompts for the chat conversation.
-- Each model (7B & 13B) runs on Replicate - (One A100 (40Gb)).
+- Each model (7B, 13B & 70BB) runs on Replicate - (7B and 13B run on one A100 40Gb, and 70B runs on one A100 80Gb).
 - Docker image included to deploy this app in Fly.io
 
 ## Installation
