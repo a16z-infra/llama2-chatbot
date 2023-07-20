@@ -1,0 +1,21 @@
+# fly.toml app configuration file generated for very-shiney-app on 2023-07-19T09:03:34-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "very-shiney-app"
+primary_region = "sjc"
+
+[build]
+  image = "registry.fly.io/very-shiney-app:deployment-01H5P834JYY4VYJ1P80E2E91P5"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 200
+    soft_limit = 100
