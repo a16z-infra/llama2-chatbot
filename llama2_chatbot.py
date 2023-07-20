@@ -38,6 +38,8 @@ st.markdown(custom_css, unsafe_allow_html=True)
 
 
 st.sidebar.header("LLaMA2 Chatbot")#Left sidebar menu
+st.sidebar.markdown('**by a16z Infra**')
+st.sidebar.markdown('**(Chatbot UI not associated with Meta Platforms, Inc)**')
 
 #Set config for a cleaner menu, footer & background:
 hide_streamlit_style = """
