@@ -19,7 +19,7 @@ You can test the LLaMA 7B, 13B & 70B chat models and this app in https://LLaMA2.
 
 - Clone the repository
 - Install dependencies with `pip install -r requirements.txt`
-- Copy the '.env_template' file to '.env' and add your Replicate API key
+- Copy the '.env_template' file to '.env' and add your [Replicate API token](https://replicate.com/account)
     - For your convenience, we intentionally include model endpoints in the '.env_template' file
 - Run the app with `streamlit run llama2_chatbot.py`
 - Docker image included to [deploy this app](#deploying-on-flyio) in Fly.io
