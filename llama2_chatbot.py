@@ -104,7 +104,7 @@ def render_app():
         st.session_state['pre_prompt'] = PRE_PROMPT
 
     btn_col1, btn_col2 = st.sidebar.columns(2)
-    
+
     # Add the "Clear Chat History" button to the sidebar
     def clear_history():
         st.session_state['chat_dialogue'] = []
@@ -120,6 +120,8 @@ def render_app():
                                 on_click=logout)
         
     # add links to relevant resources for users to select
+    st.sidebar.write(" ")
+
     text1 = 'Chatbot Demo Code' 
     text2 = 'LLaMA2 70B Model on Replicate' 
     text3 = 'LLaMa2 Cog Template'
@@ -138,6 +140,7 @@ def render_app():
         f"<img src='{logo1}' style='height: 1em'> [{text3}]({text3_link})",
         unsafe_allow_html=True)
 
+    st.sidebar.write(" ")
     st.sidebar.markdown("*Made with ❤️ by a16z Infra and Replicate. Not associated with Meta Platforms, Inc.*")
 
     # Display chat messages from history on app rerun
