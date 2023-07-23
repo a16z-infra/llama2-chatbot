@@ -9,6 +9,8 @@ This is an experimental Streamlit chatbot app built for LLaMA2 (or any other LLM
 For the LLaMA2 license agreement, please check the Meta Platforms, Inc official license documentation on their website. 
 [More info.](https://ai.meta.com/llama/)
 
+<img width="1710" alt="llama2 demo" src="https://github.com/a16z-infra/llama2-chatbot/assets/5958899/7512cbd3-ef90-4a9f-b9f6-eab5be7a483f">
+
 ## Features
 
 - Chat history is maintained for each session (if you refresh, chat history clears)
