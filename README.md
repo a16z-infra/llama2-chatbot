@@ -6,7 +6,7 @@
 
 This is an experimental Streamlit chatbot app built for LLaMA2 (or any other LLM). The app includes session chat history and provides an option to select multiple LLaMA2 API endpoints on Replicate.
 
-Live demo: [LLaMA2.ai](www.llama2.ai)
+Live demo: [LLaMA2.ai](https://llama2.ai/)
 
 For the LLaMA2 license agreement, please check the Meta Platforms, Inc official license documentation on their website. 
 [More info.](https://ai.meta.com/llama/)
