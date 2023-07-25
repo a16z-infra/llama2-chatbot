@@ -2,8 +2,8 @@
 LLaMA 2 Chatbot app
 ======================
 
-This is an Streamlit chatbot app with LLaMA2 that includes session chat history and option to select multiple LLM
-API enpoints on Replicate. Each model (7B, 13B & 70B) runs on Replicate on one A100 (40Gb). The weights have been tensorized.
+This is a Streamlit chatbot app with LLaMA2 that includes session chat history and an option to select multiple LLM
+API endpoints on Replicate. The 7B and 13B models run on Replicate on one A100 40Gb. The 70B runs in one A100 80Gb. The weights have been tensorized.
 
 Author: Marco Mascorro (@mascobot.com)
 Created: July 2023
