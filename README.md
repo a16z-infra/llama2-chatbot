@@ -42,6 +42,8 @@ For the LLaMA2 license agreement, please check the Meta Platforms, Inc official 
 - Run the app with `streamlit run llama2_chatbot.py`
 - Dockerfile included to [deploy this app](#deploying-on-flyio) in Fly.io
 
+(Note: if you are using a Mac, you may need to use the command `python3` instead of `python` and `pip3` instead of `pip`)
+
 ## Usage
 
 - Start the chatbot by selecting an API endpoint from the sidebar.
