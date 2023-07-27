@@ -25,11 +25,16 @@ For the LLaMA2 license agreement, please check the Meta Platforms, Inc official 
 ## Installation
 
 - Clone the repository
+- [Optional] Create a virtual python environment with `python -m venv .venv` and activate it with `source .venv/bin/activate`
 - Install dependencies with `pip install -r requirements.txt`
-- Copy the '.env_template' file to '.env' and add your [Replicate API token](https://replicate.com/account)
-    - For your convenience, we intentionally include model endpoints in the '.env_template' file
+- Create an account on [Replicate](https://replicate.com/) and [Auth0 (free)](https://auth0.com/)
+- Copy the `.env_template` file to `.env` and add your:
+    - [Replicate API token](https://replicate.com/account) as `REPLICATE_API_TOKEN`
+    - [Auth0 Client ID](https://auth0.com/docs/get-started/applications/application-settings) as `AUTH0_CLIENTID`
+    - [Auth0 Domain](https://auth0.com/docs/get-started/applications/application-settings) as `AUTH0_DOMAIN`
+    - For your convenience, we include common model endpoints already in the `.env_template` file
 - Run the app with `streamlit run llama2_chatbot.py`
-- Docker image included to [deploy this app](#deploying-on-flyio) in Fly.io
+- Dockerfile included to [deploy this app](#deploying-on-flyio) in Fly.io
 
 ## Usage
 
