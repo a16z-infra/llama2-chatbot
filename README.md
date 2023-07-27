@@ -27,7 +27,13 @@ For the LLaMA2 license agreement, please check the Meta Platforms, Inc official 
 - Clone the repository
 - [Optional] Create a virtual python environment with the command `python -m venv .venv` and activate it with `source .venv/bin/activate`
 - Install dependencies with `pip install -r requirements.txt`
-- Create an account on [Replicate](https://replicate.com/) and [Auth0 (free)](https://auth0.com/)
+- Create an account on [Replicate](https://replicate.com/)
+- Create an account on [Auth0 (free)](https://auth0.com/) and configure your application
+    - Create a Single Page Application
+    - Navigate to the Settings tab for that application
+    - If you are running the app locally: set Allowed Web Origins to `http://localhost:8501` and set Allowed Callback URLs to `http://localhost:8501/component/auth0_component.login_button/index.html`
+    - To run on a remote server: set Allowed Web Origins to `https://<your_domain>` and set Allowed Callback URLs to `http://<your_domain>/component/auth0_component.login_button/index.html`
+    - Copy Client ID and Domain to use in the next step
 - Make your own `.env` file with the command `cp .env_template .env`. Then edit the `.env` file and add your:
     - [Replicate API token](https://replicate.com/account) as `REPLICATE_API_TOKEN`
     - [Auth0 Client ID](https://auth0.com/docs/get-started/applications/application-settings) as `AUTH0_CLIENTID`
