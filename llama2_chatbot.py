@@ -141,7 +141,7 @@ def render_app():
         unsafe_allow_html=True)
 
     st.sidebar.write(" ")
-    st.sidebar.markdown("*Made with ❤️ by a16z Infra and Replicate. Not associated with Meta Platforms, Inc.*")
+    st.sidebar.markdown("*Made with ❤️ by a16z Infra and Replicate. Not associated with LlamaIndex, Inc.*")
 
     # Display chat messages from history on app rerun
     for message in st.session_state.chat_dialogue:
