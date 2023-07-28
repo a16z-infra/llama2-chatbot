@@ -14,12 +14,24 @@ a16z-infra
 """
 #External libraries:
 import streamlit as st
-import replicate
 from dotenv import load_dotenv
 load_dotenv()
 import os
+import argparse
 from utils import debounce_replicate_run
 from auth0_component import login_button
+
+# parse comamnd line args
+parser = argparse.ArgumentParser()
+parser.add_argument('--noauth', action='store_true', help='turns off auth')
+try:
+    args = parser.parse_args()
+    use_auth = not args.noauth
+except SystemExit as e:
+    # This exception will be raised if --help or invalid command line arguments
+    # are used. Currently streamlit prevents the program from exiting normally
+    # so we have to do a hard exit.
+    os._exit(e.code)
 
 ###Global variables:###
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN', default='')
@@ -32,8 +44,11 @@ PRE_PROMPT = "You are a helpful assistant. You do not respond as 'User' or prete
 AUTH0_CLIENTID = os.environ.get('AUTH0_CLIENTID', default='')
 AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', default='')
 
-if not (REPLICATE_API_TOKEN and REPLICATE_MODEL_ENDPOINT13B and REPLICATE_MODEL_ENDPOINT7B and 
-        AUTH0_CLIENTID and AUTH0_DOMAIN):
+if not (
+        REPLICATE_API_TOKEN and
+        REPLICATE_MODEL_ENDPOINT7B and REPLICATE_MODEL_ENDPOINT13B and REPLICATE_MODEL_ENDPOINT70B and
+        ((not use_auth) or (AUTH0_CLIENTID and AUTH0_DOMAIN))
+    ):
     st.warning("Add a `.env` file to your app directory with the keys specified in `.env_template` to continue.")
     st.stop()
 
@@ -115,9 +130,10 @@ def render_app():
     # add logout button
     def logout():
         del st.session_state['user_info']
-    logout_button = btn_col2.button("Logout",
-                                use_container_width=True,
-                                on_click=logout)
+    if use_auth:
+        logout_button = btn_col2.button("Logout",
+                                    use_container_width=True,
+                                    on_click=logout)
         
     # add links to relevant resources for users to select
     st.sidebar.write(" ")
@@ -175,8 +191,7 @@ def render_app():
         st.session_state.chat_dialogue.append({"role": "assistant", "content": full_response})
 
 
-if 'user_info' in st.session_state:
-# if user_info:
+if 'user_info' in st.session_state or (not use_auth):
     render_app()
 else:
     st.write("Please login to use the app. This is just to prevent abuse, we're not charging for usage.")

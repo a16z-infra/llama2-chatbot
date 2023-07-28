@@ -28,19 +28,28 @@ For the LLaMA2 license agreement, please check the Meta Platforms, Inc official 
 - [Optional] Create a virtual python environment with the command `python -m venv .venv` and activate it with `source .venv/bin/activate`
 - Install dependencies with `pip install -r requirements.txt`
 - Create an account on [Replicate](https://replicate.com/)
+- Make your own `.env` file with the command `cp .env_template .env`
+- Edit the `.env` file and add your:
+    - [Replicate API token](https://replicate.com/account) as `REPLICATE_API_TOKEN`
+
+*If you DON'T want to use authentication...*
+- Just run the app with the command `streamlit run llama2_chatbot.py -- --noauth`
+    - (Note the two sets of dashes. This is required for Streamlit to interpret the args correctly, see docs [here](https://docs.streamlit.io/library/advanced-features/cli).)
+
+*If you DO want to use authentication...*
 - Create an account on [Auth0 (free)](https://auth0.com/) and configure your application
     - Create a Single Page Application
     - Navigate to the Settings tab for that application
     - If you are running the app locally: set Allowed Web Origins to `http://localhost:8501` and set Allowed Callback URLs to `http://localhost:8501/component/auth0_component.login_button/index.html`
     - To run on a remote server: set Allowed Web Origins to `https://<your_domain>` and set Allowed Callback URLs to `http://<your_domain>/component/auth0_component.login_button/index.html`
     - Copy Client ID and Domain to use in the next step
-- Make your own `.env` file with the command `cp .env_template .env`. Then edit the `.env` file and add your:
-    - [Replicate API token](https://replicate.com/account) as `REPLICATE_API_TOKEN`
+- Edit the `.env` file again and add your:
     - [Auth0 Client ID](https://auth0.com/docs/get-started/applications/application-settings) as `AUTH0_CLIENTID`
     - [Auth0 Domain](https://auth0.com/docs/get-started/applications/application-settings) as `AUTH0_DOMAIN`
-    - For your convenience, we include common model endpoints already in the `.env_template` file
 - Run the app with `streamlit run llama2_chatbot.py`
-- Dockerfile included to [deploy this app](#deploying-on-flyio) in Fly.io
+
+*To deploy to production...*
+- `Dockerfile` is included to package the app and [deploy in Fly.io](#deploying-on-flyio) or other hosting providers that support Docker images
 
 (Note: if you are using a Mac, you may need to use the command `python3` instead of `python` and `pip3` instead of `pip`)
 
