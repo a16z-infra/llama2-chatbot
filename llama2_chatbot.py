@@ -62,11 +62,7 @@ def render_app():
                 </style>
                 """
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-    #container for the chat history
-    response_container = st.container()
-    #container for the user's text input
-    container = st.container()
+        
     #Set up/Initialize Session State variables:
     if 'chat_dialogue' not in st.session_state:
         st.session_state['chat_dialogue'] = []
